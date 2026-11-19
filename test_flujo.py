@@ -33,6 +33,7 @@ class Flujo(unittest.TestCase):
         cfg = chollos.leer_json(Path(chollos.__file__).parent / "config.json", {})
         cfg["vinted"] = {"activo": False, "envio_estimado": 4}
         cfg["chollos"] = {"activo": False, "max_horas": 24}
+        cfg["cashconverters"] = {"activo": False, "envio": 5, "envio_gratis_desde": 50}
         cfg["presupuesto_max"] = 500
         cfg["ubicacion"] = {"nombre": "Prueba", "lat": 40.4168, "lon": -3.7038, "radio_km": 30}
         self.cfg = cfg
@@ -221,6 +222,45 @@ class Flujo(unittest.TestCase):
         self.vinted.append(vinted_item("2", precio=185))  # 185+11=196 > 195 de venta: sin margen
         self.ronda()
         self.assertEqual(self.ids(), [])
+
+    # ---- Cash Converters
+    def test_cash_converters_primera_vez_apunta_y_luego_avisa(self):
+        self.cfg["cashconverters"] = {"activo": True, "envio": 5, "envio_gratis_desde": 50}
+        (self.tmp / "config.json").write_text(json.dumps(self.cfg), encoding="utf-8")
+
+        def art(pid, precio):
+            return {"id": "k" + pid, "titulo": "apple iphone 13 128gb", "desc": "", "precio": float(precio),
+                    "coste_total": float(precio), "estado": "Bueno", "lat": None, "lon": None, "ciudad": "",
+                    "reservado": False, "envio": True, "url": "https://www.cashconverters.es/" + pid,
+                    "foto": None, "creado": 0, "origen": "cashconverters"}
+        self.cc = [art("A", 140)]
+        with mock.patch.object(chollos, "cc_buscar", lambda texto, cfg: list(self.cc) if texto == "iphone 13" else []):
+            self.ronda()
+            self.assertEqual(self.ids(), [], "lo ya existente no se avisa")
+            self.cc.append(art("B", 150))
+            self.ronda()
+            self.ronda()
+        self.assertEqual(self.ids(), ["kB"], "lo nuevo avisa una sola vez")
+        self.assertIn("Cash Converters", self.enviados[0][1])
+
+    def test_cash_converters_mismo_articulo_en_varias_tiendas_avisa_una_vez(self):
+        self.cfg["cashconverters"] = {"activo": True, "envio": 5, "envio_gratis_desde": 50}
+        (self.tmp / "config.json").write_text(json.dumps(self.cfg), encoding="utf-8")
+
+        def art(pid):
+            return {"id": "k" + pid, "titulo": "apple iphone 13 128gb", "desc": "", "precio": 150.0,
+                    "coste_total": 150.0, "estado": "Bueno", "lat": None, "lon": None, "ciudad": "",
+                    "reservado": False, "envio": True, "url": "https://www.cashconverters.es/" + pid,
+                    "foto": None, "creado": 0, "origen": "cashconverters"}
+        self.cc = []
+        with mock.patch.object(chollos, "cc_buscar", lambda texto, cfg: list(self.cc) if texto == "iphone 13" else []):
+            self.ronda()  # primera vez: base vacía
+            self.cc = [art("A"), art("B"), art("C")]
+            self.ronda()
+            self.cc = [art("A"), art("B"), art("C"), art("D")]  # otra tienda lo añade después
+            self.ronda()
+        self.assertEqual(len(self.ids()), 1, "un solo aviso para el mismo artículo")
+        self.assertIn("3 unidades", self.enviados[0][1])
 
     # ---- Chollos online
     def test_chollo_de_aliexpress_se_avisa(self):

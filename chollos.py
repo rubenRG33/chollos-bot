@@ -381,6 +381,63 @@ def vinted_ficha(op, url):
     return desc, vendedor
 
 
+# ---------------------------------------------------------------- Cash Converters
+CASH = "https://www.cashconverters.es"
+
+
+def cc_get(url, intentos=3):
+    ultimo = None
+    for i in range(intentos):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "es-ES,es;q=0.9"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            ultimo = e
+            if e.code not in (429, 500, 502, 503, 504):
+                break
+        except (urllib.error.URLError, TimeoutError) as e:
+            ultimo = e
+        if i < intentos - 1:
+            time.sleep(5 * (i + 1) ** 2)
+    raise RuntimeError("Fallo de red en Cash Converters: %s" % ultimo)
+
+
+def parsear_cashconverters(pagina, cfg):
+    """Saca los artículos disponibles de una página de búsqueda de Cash Converters."""
+    c = cfg.get("cashconverters", {})
+    envio, gratis = c.get("envio", 5), c.get("envio_gratis_desde", 50)
+    items, vistos = [], set()
+    for trozo in pagina.split('<div class="product-tile')[1:]:
+        m = re.search(r'data-product-datalayer="([^"]+)"', trozo[:2000])
+        if not m or "tile-body available" not in trozo:
+            continue  # sin datos o sin stock
+        try:
+            d = json.loads(html.unescape(m.group(1)))
+        except ValueError:
+            continue
+        pid, precio = d.get("id"), d.get("price")
+        if not pid or precio is None or pid in vistos:
+            continue
+        vistos.add(pid)
+        href = re.search(r'class="link" href="([^"]+)"', trozo)
+        foto = re.search(r'class="tile-image" src="([^"]+)"', trozo)
+        precio = float(precio)
+        items.append({
+            "id": "k" + pid, "titulo": d.get("name") or "", "desc": "", "precio": precio,
+            "coste_total": precio + (0 if precio >= gratis else envio), "estado": d.get("variant") or "",
+            "lat": None, "lon": None, "ciudad": "", "reservado": False, "envio": True,
+            "url": CASH + html.unescape(href.group(1)) if href else CASH, "foto": html.unescape(foto.group(1)) if foto else None,
+            "creado": 0, "origen": "cashconverters",
+        })
+    return items
+
+
+def cc_buscar(texto, cfg):
+    url = CASH + "/es/es/search/?" + urllib.parse.urlencode({"q": texto, "sz": 96})
+    return parsear_cashconverters(cc_get(url), cfg)
+
+
 # ---------------------------------------------------------------- clasificación
 def normalizar_variante(v):
     v = v.lower().replace(" ", "").replace(",", ".")
@@ -461,7 +518,7 @@ def evaluar(it, mer, cfg):
         "venta": round(venta),
         "beneficio": round(beneficio),
         "n": mer["n"],
-        "sospechoso": it["precio"] < 0.4 * mer["mediana"],
+        "sospechoso": it["precio"] < 0.5 * mer["mediana"],
     }
 
 
@@ -478,7 +535,17 @@ def texto_aviso(it, prod_nombre, var, ev, dist):
     vinted = it.get("origen") == "vinted"
     nombre = prod_nombre if var in ("unico", "disco", "normal") else "%s (%s)" % (prod_nombre, var)
     chollo = it.get("origen") == "chollo"
-    if chollo:
+    cash = it.get("origen") == "cashconverters"
+    if cash:
+        precio = "💰 Cuesta <b>%d €</b>%s · venta estimada ≈ <b>%d €</b> (%d anuncios parecidos en Wallapop)" % (
+            round(it["precio"]),
+            " (≈ %d € con envío)" % round(it["coste_total"]) if it["coste_total"] > it["precio"] else "",
+            ev["venta"], ev["n"])
+        sitio = ("🏬 Cash Converters · estado: %s · artículo revisado por la tienda%s\n"
+                 "🚚 Envío gratis desde 50 € o recogida en la tienda que elijas") % (
+            esc(it.get("estado") or "no indicado"),
+            " · hay %d unidades en distintas tiendas" % it["unidades"] if it.get("unidades", 1) > 1 else "")
+    elif chollo:
         precio = "💰 <b>%d €</b> en %s · venta estimada ≈ <b>%d €</b> (%d anuncios parecidos en Wallapop)" % (
             round(it["precio"]), esc(it.get("tienda") or "tienda"), ev["venta"], ev["n"])
         sitio = "🛒 Oferta online (Chollometro) · compra y espera el envío"
@@ -512,7 +579,8 @@ def enviar_aviso(it, texto):
     chat = os.environ.get("TELEGRAM_CHAT_ID")
     if not chat:
         raise RuntimeError("Falta TELEGRAM_CHAT_ID (ejecuta configurar.py)")
-    etiqueta = {"vinted": "Abrir en Vinted", "chollo": "Ver oferta"}.get(it.get("origen"), "Abrir en Wallapop")
+    etiqueta = {"vinted": "Abrir en Vinted", "chollo": "Ver oferta",
+                                                       "cashconverters": "Abrir en Cash Converters"}.get(it.get("origen"), "Abrir en Wallapop")
     boton = {"inline_keyboard": [[{"text": etiqueta, "url": it["url"]}]]}
     if it["foto"]:
         try:
@@ -655,6 +723,12 @@ def comprobar():
             raise RuntimeError("anuncios ok pero no leo al vendedor")
         return "%d anuncios, vendedor legible" % len(items)
 
+    def p_cashconverters():
+        items = cc_buscar("iphone", cfg)
+        if not items:
+            raise RuntimeError("0 artículos (¿bloqueo?)")
+        return "%d artículos" % len(items)
+
     def p_chollos():
         return "%d ofertas" % len(leer_chollometro())
 
@@ -668,6 +742,7 @@ def comprobar():
         paso("Wallapop (búsqueda)", p_wallapop)
         paso("Wallapop (vendedor)", p_vendedor)
         paso("Vinted", p_vinted)
+        paso("Cash Converters", p_cashconverters)
         paso("Chollometro", p_chollos)
     print("\n%s" % ("TODO CORRECTO" if not fallos else "HAY %d PROBLEMA(S)" % fallos))
     return fallos
@@ -812,6 +887,61 @@ def ejecutar(args):
             if primera and not args.prueba:
                 base.append(prod["nombre"])
 
+    if cfg.get("cashconverters", {}).get("activo"):
+        base_cc = estado.setdefault("cc_base", [])
+        for prod in cfg["productos"]:
+            primera = prod["nombre"] not in base_cc  # primera vez: solo apunta lo que ya hay
+            try:
+                items = cc_buscar(prod["buscar"], cfg)
+            except RuntimeError as e:
+                log.error("Cash Converters %s: %s", prod["nombre"], e)
+                continue
+            pausa(cfg)
+            grupos = {}  # el mismo artículo en varias tiendas cuenta como uno
+            for it in items:
+                if it["id"] in ids_ronda:
+                    continue
+                ids_ronda.add(it["id"])
+                grupo = "kg:%s|%s|%s" % (it["titulo"], it["estado"], it["precio"])
+                if grupo in grupos:
+                    grupos[grupo]["unidades"] = grupos[grupo].get("unidades", 1) + 1
+                    continue
+                previo = vistos.get(it["id"])
+                if previo and previo["p"] == it["precio"]:
+                    continue
+                if grupo in vistos:
+                    vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+                    continue  # ese mismo artículo ya se evaluó en otra tienda
+                grupos[grupo] = it
+                it["grupo"] = grupo
+                if primera and not args.prueba:
+                    vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+                    vistos[grupo] = {"p": it["precio"], "t": ahora}
+                    continue
+                if it["precio"] > cfg["presupuesto_max"]:
+                    continue
+                var = clasificar(prod, it, cfg)
+                if var is None:
+                    continue
+                try:
+                    mer = mercado_producto(prod, cfg, cache).get(var)
+                except RuntimeError as e:
+                    log.error("Mercado %s: %s", prod["nombre"], e)
+                    continue
+                if not mer or mer["n"] < cfg["min_comparables"]:
+                    continue
+                ev = evaluar(it, mer, cfg)
+                log.info("%s [Cash Converters] %s | %d€ | mercado %d€ | beneficio %d€",
+                         "✔" if ev["beneficio"] >= cfg["beneficio_min"] else "·",
+                         it["titulo"][:50], it["precio"], ev["venta"], ev["beneficio"])
+                if ev["beneficio"] >= cfg["beneficio_min"]:
+                    candidatos.append((it, prod["nombre"], var, ev, None))
+                else:
+                    vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+                    vistos[grupo] = {"p": it["precio"], "t": ahora}
+            if primera and not args.prueba:
+                base_cc.append(prod["nombre"])
+
     if cfg.get("chollos", {}).get("activo"):
         try:
             ofertas = leer_chollometro()
@@ -867,6 +997,8 @@ def ejecutar(args):
         try:
             enviar_aviso(it, texto_aviso(it, nombre, var, ev, dist))
             vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+            if it.get("grupo"):
+                vistos[it["grupo"]] = {"p": it["precio"], "t": ahora}
             estado["avisos"] = estado.get("avisos", 0) + 1
             guardar_json(ESTADO, estado)  # tras cada aviso entregado
             time.sleep(1)

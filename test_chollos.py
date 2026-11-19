@@ -45,6 +45,12 @@ class Clasificacion(unittest.TestCase):
         a["categoria"] = "Gaming > Consolas y accesorios > Accesorios y recambios de consolas"
         self.assertIsNone(chollos.clasificar(PROD["Nintendo Switch"], a, CFG))
 
+    def test_avisos_de_estafa_y_busquedas_extranjeras_se_descartan(self):
+        for titulo in ("Atencion estafas con playStation 5 leer", "Procuro Xbox Series S",
+                       "Steam Deck 512GB LCD Stan idealny"):
+            prod = PROD["PS5"] if "playStation" in titulo else (PROD["Xbox Series"] if "Xbox" in titulo else PROD["Steam Deck"])
+            self.assertIsNone(chollos.clasificar(prod, anuncio(titulo, 250), CFG), titulo)
+
     def test_busco_se_descarta(self):
         self.assertIsNone(chollos.clasificar(PROD["iPhone 12"], anuncio("Busco iPhone 12 64gb"), CFG))
 
@@ -101,6 +107,10 @@ class Beneficio(unittest.TestCase):
         ev = chollos.evaluar({"precio": 50.0}, {"mediana": 300.0, "n": 10}, CFG)
         self.assertTrue(ev["sospechoso"])
 
+    def test_menos_de_la_mitad_del_mercado_es_sospechoso(self):
+        self.assertTrue(chollos.evaluar({"precio": 245.0}, {"mediana": 570.0, "n": 10}, CFG)["sospechoso"])
+        self.assertFalse(chollos.evaluar({"precio": 160.0}, {"mediana": 300.0, "n": 10}, CFG)["sospechoso"])
+
 
 class Distancia(unittest.TestCase):
     def test_sol_y_getafe_estan_a_unos_12km(self):
@@ -124,6 +134,34 @@ class Ubicacion(unittest.TestCase):
     def test_config_del_repositorio_no_lleva_ubicacion_real(self):
         cfg = chollos.leer_json(chollos.CONFIG, {})
         self.assertEqual((cfg["ubicacion"]["lat"], cfg["ubicacion"]["lon"]), (0, 0))
+
+
+class CashConverters(unittest.TestCase):
+    def tile(self, pid, nombre, precio, estado="Bueno", disponible=True):
+        dl = ('{&quot;id&quot;:&quot;%s&quot;,&quot;name&quot;:&quot;%s&quot;,&quot;price&quot;:%s,&quot;variant&quot;:&quot;%s&quot;}'
+              % (pid, nombre, precio, estado))
+        return ('<div class="product-tile search-link" data-pid="%s" data-product-datalayer="%s">'
+                '<img class="tile-image" src="https://images.cashconverters.es/x.jpg?d=small" alt="a"/>'
+                '<div class="tile-body%s"><a class="link" href="/es/es/comprar/x/?firstProduct=%s">%s</a></div></div>'
+                % (pid, dl, " available" if disponible else "", pid, nombre))
+
+    def test_parsea_precio_estado_foto_y_enlace(self):
+        its = chollos.parsear_cashconverters(self.tile("CC1_E1_0", "apple iphone 13 128gb", 229.45, "Usado"), CFG)
+        self.assertEqual(len(its), 1)
+        a = its[0]
+        self.assertEqual((a["id"], a["titulo"], a["precio"], a["estado"]), ("kCC1_E1_0", "apple iphone 13 128gb", 229.45, "Usado"))
+        self.assertEqual(a["url"], "https://www.cashconverters.es/es/es/comprar/x/?firstProduct=CC1_E1_0")
+        self.assertTrue(a["foto"].startswith("https://images"))
+
+    def test_sin_stock_y_repetidos_se_ignoran(self):
+        pag = (self.tile("A", "iphone 13 128gb", 200, disponible=False) + self.tile("B", "iphone 13 128gb", 210)
+               + self.tile("B", "iphone 13 128gb", 210))
+        self.assertEqual([i["id"] for i in chollos.parsear_cashconverters(pag, CFG)], ["kB"])
+
+    def test_envio_solo_si_baja_de_50(self):
+        barato, caro = chollos.parsear_cashconverters(self.tile("A", "x", 30) + self.tile("B", "x", 80), CFG)
+        self.assertEqual(barato["coste_total"], 30 + CFG["cashconverters"]["envio"])
+        self.assertEqual(caro["coste_total"], 80)
 
 
 class Vinted(unittest.TestCase):

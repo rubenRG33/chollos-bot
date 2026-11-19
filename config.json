@@ -17,7 +17,7 @@
     2,
     4
   ],
-  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b",
+  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b|estafa|atenci[oó]n|procuro|qualsiasi|idealny|sprzeda|\\bstan\\b|\\bnowy\\b|\\bkaufe\\b|\\bsuche\\b",
   "excluir_defectos": "para piezas|despiece|averiad|no funciona|no enciende|no carga|sin funcionar|defectuos|para reparar|\\broto\\b|\\brota\\b|\\brotos\\b|bloquead[oa]|pantalla (rota|partida)|cristal (roto|partido)|no da imagen|placa (da[ñn]ada|base)",
   "productos": [
     {
@@ -127,6 +127,96 @@
       "variante": "(\\d{1,2}(?:[.,]\\d)?)\\s*kg",
       "variante_obligatoria": true,
       "precio_min": 8
+    },
+    {
+      "nombre": "iPhone 15",
+      "buscar": "iphone 15",
+      "patron": "iphone\\s*15",
+      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 280
+    },
+    {
+      "nombre": "Samsung Galaxy S23",
+      "buscar": "samsung galaxy s23",
+      "patron": "galaxy\\s*s23",
+      "excluye": "ultra|plus|\\+|\\bfe\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 140
+    },
+    {
+      "nombre": "MacBook Air M1",
+      "buscar": "macbook air m1",
+      "patron": "macbook\\s*air.*\\bm1\\b|\\bm1\\b.*macbook\\s*air",
+      "excluye": "funda|cargador|bater|pantalla|teclado|carcasa|piezas|m2|m3|protector|adaptador|hub|soporte",
+      "variante": "(256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 300
+    },
+    {
+      "nombre": "Steam Deck",
+      "buscar": "steam deck",
+      "patron": "steam\\s*deck",
+      "excluye": "funda|dock|base|cargador|juego|protector|soporte|carcasa|grip|skin|bater|ssd|tarjeta|cable",
+      "variante": "(oled)|(64|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 150
+    },
+    {
+      "nombre": "Meta Quest",
+      "buscar": "meta quest",
+      "patron": "quest\\s*[23]\\b",
+      "excluye": "funda|correa|bater|elite|accesorio|cargador|protector|soporte|lente|cable|juego|carcasa|grip|facial|interfaz",
+      "variante": "quest\\s*([23])",
+      "variante_obligatoria": true,
+      "precio_min": 80
+    },
+    {
+      "nombre": "Xbox Series",
+      "buscar": "xbox series",
+      "patron": "xbox\\s*series\\s*[sx]\\b",
+      "excluye": "mando|juego|cargador|funda|base|soporte|disco duro|ssd|tarjeta|auricular|volante|kinect|stand|pila|skin|expansi|cable|caja",
+      "variante": "series\\s*([sx])\\b",
+      "variante_obligatoria": true,
+      "precio_min": 120
+    },
+    {
+      "nombre": "GoPro Hero",
+      "buscar": "gopro hero",
+      "patron": "gopro\\s*hero\\s*\\d{1,2}\\b",
+      "excluye": "funda|carcasa|bater|soporte|palo|tr[ií]pode|accesorio|cargador|tarjeta|filtro|mando|correa|gafas|casco|arn[eé]s|pack|jaula|mic|sin c[aá]mara|compatible",
+      "variante": "hero\\s*(\\d{1,2})\\b",
+      "variante_obligatoria": true,
+      "precio_min": 60
+    },
+    {
+      "nombre": "Dyson V",
+      "buscar": "dyson v",
+      "patron": "dyson\\s*v\\d{1,2}\\b",
+      "excluye": "filtro|bater|cepillo|accesorio|repuesto|soporte|cargador|motor|boquilla|manguera|tubo|kit|pieza|solo|compatible|pared",
+      "variante": "dyson\\s*(v\\d{1,2})",
+      "variante_obligatoria": true,
+      "precio_min": 80
+    },
+    {
+      "nombre": "Garmin Forerunner",
+      "buscar": "garmin forerunner",
+      "patron": "forerunner\\s*\\d{2,3}",
+      "excluye": "correa|cargador|cable|funda|protector|cristal|soporte|bater|pulsera|banda|compatible",
+      "variante": "forerunner\\s*(\\d{2,3})",
+      "variante_obligatoria": true,
+      "precio_min": 40
+    },
+    {
+      "nombre": "PS4",
+      "buscar": "ps4",
+      "patron": "(\\bps4\\b|playstation\\s*4)",
+      "excluye": "mando|dualshock|juego|\\bvr\\b|cascos|base|soporte|c[aá]mara|disco duro|ssd|fifa|volante|funda|skin|cable|cargador|stand|ventilador|edition|edici[oó]n|day one|repod|gta|pes",
+      "variante": "(pro|slim)",
+      "variante_defecto": "normal",
+      "precio_min": 70
     }
   ],
   "vinted": {
@@ -141,5 +231,10 @@
     "activo": true,
     "max_horas": 24
   },
-  "excluir_categoria": "Videojuegos y más|Accesorios y recambios|Accesorios de móviles|Cristales templados|Juegos para PC|Juegos recreativos"
+  "excluir_categoria": "Videojuegos y más|Accesorios y recambios|Accesorios de móviles|Cristales templados|Juegos para PC|Juegos recreativos",
+  "cashconverters": {
+    "activo": true,
+    "envio": 5,
+    "envio_gratis_desde": 50
+  }
 }
