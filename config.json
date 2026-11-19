@@ -1,0 +1,144 @@
+{
+  "ubicacion": {
+    "nombre": "Tu zona (se define con CHOLLOS_LAT y CHOLLOS_LON)",
+    "lat": 0,
+    "lon": 0,
+    "radio_km": 30
+  },
+  "presupuesto_max": 500,
+  "beneficio_min": 30,
+  "descuento_venta": 0.92,
+  "costes_extra": 0,
+  "max_horas_anuncio": 6,
+  "min_comparables": 4,
+  "horas_cache_mercado": 12,
+  "minutos_entre_rondas": 5,
+  "pausa_segundos": [
+    2,
+    4
+  ],
+  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b",
+  "excluir_defectos": "para piezas|despiece|averiad|no funciona|no enciende|no carga|sin funcionar|defectuos|para reparar|\\broto\\b|\\brota\\b|\\brotos\\b|bloquead[oa]|pantalla (rota|partida)|cristal (roto|partido)|no da imagen|placa (da[ñn]ada|base)",
+  "productos": [
+    {
+      "nombre": "iPhone 11",
+      "buscar": "iphone 11",
+      "patron": "iphone\\s*11",
+      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 80
+    },
+    {
+      "nombre": "iPhone 12",
+      "buscar": "iphone 12",
+      "patron": "iphone\\s*12",
+      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 100
+    },
+    {
+      "nombre": "iPhone 13",
+      "buscar": "iphone 13",
+      "patron": "iphone\\s*13",
+      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 130
+    },
+    {
+      "nombre": "iPhone 14",
+      "buscar": "iphone 14",
+      "patron": "iphone\\s*14",
+      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 180
+    },
+    {
+      "nombre": "Samsung Galaxy S21",
+      "buscar": "samsung galaxy s21",
+      "patron": "galaxy\\s*s21",
+      "excluye": "ultra|plus|\\+|\\bfe\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 70
+    },
+    {
+      "nombre": "Samsung Galaxy S22",
+      "buscar": "samsung galaxy s22",
+      "patron": "galaxy\\s*s22",
+      "excluye": "ultra|plus|\\+|\\bfe\\b|funda|cargador|cable|protector|carcasa",
+      "variante": "(64|128|256|512)\\s*gb",
+      "variante_obligatoria": true,
+      "precio_min": 90
+    },
+    {
+      "nombre": "PS5",
+      "buscar": "ps5",
+      "patron": "(\\bps5\\b|playstation\\s*5)",
+      "excluye": "mando|dualsense|juego|\\bpro\\b|\\bvr\\b|vr2|cascos|pulse|base|soporte|c[aá]mara|disco duro|ssd|fifa|ea sports|spider|god of war|call of duty|volante|funda|skin|cable|cargador|stand|ventilador|portal|edge|edition|edici[oó]n|day one|repod|manette|controller|\\bgta\\b|collector",
+      "variante": "(digital)",
+      "variante_defecto": "disco",
+      "precio_min": 150
+    },
+    {
+      "nombre": "Nintendo Switch",
+      "buscar": "nintendo switch",
+      "patron": "(nintendo\\s*switch|switch\\s*(oled|lite))",
+      "excluye": "juego|funda|mando|joy|dock|base|cartucho|amiibo|pro controller|\\b2\\b|zelda|mario|pokemon|kart|tarjeta|\\bsd\\b|cargador|cable|protector|soporte|volante|ring|edition|edici[oó]n|day one|repod",
+      "variante": "(oled|lite)",
+      "variante_defecto": "normal",
+      "precio_min": 70
+    },
+    {
+      "nombre": "Apple Watch",
+      "buscar": "apple watch",
+      "patron": "apple\\s*watch",
+      "excluye": "correa|cargador|funda|cristal|protector|pulsera|base|soporte|cable|carcasa|malla|\\bbanda\\b|repod|airpod|dock|stand",
+      "variante": "\\b(?:series?\\s*)?(10|[4-9])\\b(?!\\s*mm)|\\b(se|ultra)\\b",
+      "variante_obligatoria": true,
+      "precio_min": 70
+    },
+    {
+      "nombre": "Kettlebell",
+      "buscar": "kettlebell",
+      "patron": "kettlebell|pesa rusa",
+      "excluye": "lote|pack|set|juego|pareja|\\bpar\\b|\\dx|x\\d",
+      "variante": "(\\d{1,2})\\s*kg",
+      "variante_obligatoria": true,
+      "precio_min": 8
+    },
+    {
+      "nombre": "Mancuernas ajustables",
+      "buscar": "mancuernas ajustables",
+      "patron": "mancuernas.*ajustables?|ajustables?.*mancuernas",
+      "excluye": "lote|pack|set|juego|\\dx|x\\d",
+      "variante": "(\\d{2})\\s*kg",
+      "variante_obligatoria": true,
+      "precio_min": 15
+    },
+    {
+      "nombre": "Discos de pesas",
+      "buscar": "discos olimpicos",
+      "patron": "discos?\\s*(ol[ií]mpicos?|de pesas?)",
+      "excluye": "lote|pack|set|juego|barra|\\dx|x\\d",
+      "variante": "(\\d{1,2}(?:[.,]\\d)?)\\s*kg",
+      "variante_obligatoria": true,
+      "precio_min": 8
+    }
+  ],
+  "vinted": {
+    "activo": true,
+    "envio_estimado": 4
+  },
+  "vendedor": {
+    "descartar_si_menos_de": 1,
+    "avisar_si_menos_de": 5
+  },
+  "chollos": {
+    "activo": true,
+    "max_horas": 24
+  }
+}

@@ -1,0 +1,56 @@
+name: chollos
+
+on:
+  # schedule:                 # se activa tras comprobar que GitHub puede consultar Wallapop y Vinted
+  #   - cron: "*/10 * * * *"
+  workflow_dispatch:          # permite lanzarlo a mano desde GitHub
+    inputs:
+      comprobar:
+        description: "Solo comprobar que todo funciona (no envía avisos)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chollos
+  cancel-in-progress: false   # nunca dos rondas a la vez
+
+jobs:
+  ronda:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # El estado (anuncios ya vistos y precios de mercado) se guarda en la caché de Actions.
+      - name: Recuperar estado
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            estado.json
+            mercado.json
+          key: chollos-estado-nuevo
+          restore-keys: chollos-estado-
+
+      - name: Buscar chollos y avisar por Telegram
+        run: python chollos.py ${{ inputs.comprobar && '--comprobar' || '' }}
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CHOLLOS_LAT: ${{ secrets.CHOLLOS_LAT }}
+          CHOLLOS_LON: ${{ secrets.CHOLLOS_LON }}
+
+      - name: Guardar estado
+        if: always() && !inputs.comprobar
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            estado.json
+            mercado.json
+          key: chollos-estado-${{ github.run_id }}-${{ github.run_attempt }}

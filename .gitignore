@@ -1,0 +1,7 @@
+.env
+estado.json
+mercado.json
+*.log
+__pycache__/
+.candado
+.prueba_escritura.json

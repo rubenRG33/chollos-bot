@@ -1,0 +1,35 @@
+name: latido
+
+# Mensaje diario de control por Telegram: confirma que el bot sigue haciendo rondas.
+# Si un día no llega, o llega con aviso de "parado", algo falla.
+# Hora: 08:30 UTC (09:30 en invierno, 10:30 en verano en España).
+on:
+  # schedule:                 # se activa junto con el de chollos.yml
+  #   - cron: "30 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  latido:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Recuperar estado
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            estado.json
+            mercado.json
+          key: chollos-estado-nuevo
+          restore-keys: chollos-estado-
+      - name: Enviar control diario
+        run: python chollos.py --latido
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
