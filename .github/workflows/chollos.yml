@@ -1,8 +1,8 @@
 name: chollos
 
 on:
-  # schedule:                 # se activa tras comprobar que GitHub puede consultar Wallapop y Vinted
-  #   - cron: "*/10 * * * *"
+  schedule:
+    - cron: "*/10 * * * *"   # cada 10 minutos, 24/7
   workflow_dispatch:          # permite lanzarlo a mano desde GitHub
     inputs:
       comprobar:

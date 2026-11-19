@@ -4,8 +4,8 @@ name: latido
 # Si un día no llega, o llega con aviso de "parado", algo falla.
 # Hora: 08:30 UTC (09:30 en invierno, 10:30 en verano en España).
 on:
-  # schedule:                 # se activa junto con el de chollos.yml
-  #   - cron: "30 8 * * *"
+  schedule:
+    - cron: "30 8 * * *"
   workflow_dispatch:
 
 permissions:
