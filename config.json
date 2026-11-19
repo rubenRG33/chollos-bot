@@ -140,5 +140,6 @@
   "chollos": {
     "activo": true,
     "max_horas": 24
-  }
+  },
+  "excluir_categoria": "Videojuegos y más|Accesorios y recambios|Accesorios de móviles|Cristales templados|Juegos para PC|Juegos recreativos"
 }

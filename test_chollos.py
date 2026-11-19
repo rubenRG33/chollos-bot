@@ -32,6 +32,19 @@ class Clasificacion(unittest.TestCase):
         self.assertIsNone(chollos.clasificar(PROD["PS5"], anuncio("Manette PS5 GTA"), CFG))
         self.assertIsNone(chollos.clasificar(PROD["iPhone 13"], anuncio("iPhone 13 128GB Mezzanotte"), CFG))
 
+    def test_videojuego_por_categoria_no_es_consola(self):
+        juego = anuncio("Animal Well (Nintendo Switch)", 75)
+        juego["categoria"] = "Gaming: consolas y videojuegos > Videojuegos y más > Videojuegos"
+        self.assertIsNone(chollos.clasificar(PROD["Nintendo Switch"], juego, CFG))
+        consola = anuncio("Nintendo Switch OLED", 150)
+        consola["categoria"] = "Gaming: consolas y videojuegos > Consolas y accesorios > Consolas"
+        self.assertEqual(chollos.clasificar(PROD["Nintendo Switch"], consola, CFG), "oled")
+
+    def test_accesorio_por_categoria_se_descarta(self):
+        a = anuncio("Nintendo Switch Joy-Con Pair", 80)
+        a["categoria"] = "Gaming > Consolas y accesorios > Accesorios y recambios de consolas"
+        self.assertIsNone(chollos.clasificar(PROD["Nintendo Switch"], a, CFG))
+
     def test_busco_se_descarta(self):
         self.assertIsNone(chollos.clasificar(PROD["iPhone 12"], anuncio("Busco iPhone 12 64gb"), CFG))
 

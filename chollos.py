@@ -164,6 +164,7 @@ def normalizar(raw):
         "url": "https://es.wallapop.com/item/%s" % raw.get("web_slug", raw.get("id")),
         "foto": foto,
         "creado": (raw.get("created_at") or 0) / 1000.0,
+        "categoria": " > ".join(t.get("name", "") for t in raw.get("taxonomy") or []),
     }
 
 
@@ -397,6 +398,8 @@ def clasificar(prod, it, cfg):
         return None
     if re.search(cfg["excluir_titulo"], titulo):
         return None
+    if cfg.get("excluir_categoria") and re.search(cfg["excluir_categoria"], it.get("categoria", "")):
+        return None  # Wallapop lo clasifica como videojuego, accesorio, funda, etc.
     if re.search(cfg["excluir_defectos"], titulo + " " + it["desc"].lower()):
         return None
     if not prod.get("variante"):
