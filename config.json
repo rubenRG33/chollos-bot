@@ -17,7 +17,7 @@
     2,
     4
   ],
-  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b|estafa|atenci[oó]n|procuro|qualsiasi|idealny|sprzeda|\\bstan\\b|\\bnowy\\b|\\bkaufe\\b|\\bsuche\\b",
+  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b|estafa|atenci[oó]n|procuro|qualsiasi|idealny|sprzeda|\\bstan\\b|\\bnowy\\b|\\bkaufe\\b|\\bsuche\\b|\\blotes?\\b|\\blot\\b|lotto|bundle|\\bleer\\b|\\blee\\b|\\blire\\b|\\blees\\b|arnaque|\\bscam\\b|quiero comprar|comprarme|cagnotte|colecta|donaci|\\brifa\\b|sorteo|simulat|pedalier|p[ée]dalier|extension|expansi|port[aá]til|\\bportal\\b|\\bavec\\b|tr[eè]s|[ée]tat|occasion|lecteur|giochi|gioco|nuov[oa]|usato|ricondizionat|versione|colore|scatola|joestick|nieuw|\\bmet\\b|\\bnovo\\b|\\bmit\\b|\\bund\\b|gebraucht|\\bneu\\b|neuf|neuve|vendu|\\bprix\\b|\\bjour\\b|preuve|seconda|generazione|con cd|non compra|spedizione|g[ée]n[ée]ration|\\d(eme|ème)\\b|\\bcomme neuf\\b|\\bbon\\b|\\bbonne\\b",
   "excluir_defectos": "para piezas|despiece|averiad|no funciona|no enciende|no carga|sin funcionar|defectuos|para reparar|\\broto\\b|\\brota\\b|\\brotos\\b|bloquead[oa]|pantalla (rota|partida)|cristal (roto|partido)|no da imagen|placa (da[ñn]ada|base)",
   "productos": [
     {
@@ -81,13 +81,14 @@
       "excluye": "mando|dualsense|juego|\\bpro\\b|\\bvr\\b|vr2|cascos|pulse|base|soporte|c[aá]mara|disco duro|ssd|fifa|ea sports|spider|god of war|call of duty|volante|funda|skin|cable|cargador|stand|ventilador|portal|edge|edition|edici[oó]n|day one|repod|manette|controller|\\bgta\\b|collector",
       "variante": "(digital)",
       "variante_defecto": "disco",
-      "precio_min": 150
+      "precio_min": 150,
+      "sin_vinted": true
     },
     {
       "nombre": "Nintendo Switch",
       "buscar": "nintendo switch",
       "patron": "(nintendo\\s*switch|switch\\s*(oled|lite))",
-      "excluye": "juego|funda|mando|joy|dock|base|cartucho|amiibo|pro controller|\\b2\\b|zelda|mario|pokemon|kart|tarjeta|\\bsd\\b|cargador|cable|protector|soporte|volante|ring|edition|edici[oó]n|day one|repod",
+      "excluye": "juego|funda|mando|joy|dock|base|cartucho|amiibo|pro controller|\\b2\\b|zelda|mario|pokemon|kart|tarjeta|\\bsd\\b|cargador|cable|protector|soporte|volante|ring|edition|edici[oó]n|day one|repod|collection|colecci|anniversary|special reserve|super rare|limited run|physical|\\bgame\\b|\\bjeu\\b|dlc",
       "variante": "(oled|lite)",
       "variante_defecto": "normal",
       "precio_min": 70
@@ -162,7 +163,8 @@
       "excluye": "funda|dock|base|cargador|juego|protector|soporte|carcasa|grip|skin|bater|ssd|tarjeta|cable",
       "variante": "(oled)|(64|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 150
+      "precio_min": 150,
+      "sin_vinted": true
     },
     {
       "nombre": "Meta Quest",
@@ -177,10 +179,11 @@
       "nombre": "Xbox Series",
       "buscar": "xbox series",
       "patron": "xbox\\s*series\\s*[sx]\\b",
-      "excluye": "mando|juego|cargador|funda|base|soporte|disco duro|ssd|tarjeta|auricular|volante|kinect|stand|pila|skin|expansi|cable|caja",
+      "excluye": "mando|juego|cargador|funda|base|soporte|disco duro|ssd|tarjeta|auricular|volante|kinect|stand|pila|skin|expansi|cable|caja|controller|xbox one|series x/s",
       "variante": "series\\s*([sx])\\b",
       "variante_obligatoria": true,
-      "precio_min": 120
+      "precio_min": 120,
+      "sin_vinted": true
     },
     {
       "nombre": "GoPro Hero",
@@ -224,8 +227,9 @@
     "envio_estimado": 4
   },
   "vendedor": {
-    "descartar_si_menos_de": 1,
-    "avisar_si_menos_de": 5
+    "descartar_si_menos_de": 3,
+    "avisar_si_menos_de": 10,
+    "descartar_si_menos_de_vinted": 5
   },
   "chollos": {
     "activo": true,
@@ -236,5 +240,6 @@
     "activo": true,
     "envio": 5,
     "envio_gratis_desde": 50
-  }
+  },
+  "descartar_bajo_pct_mercado": 0.45
 }

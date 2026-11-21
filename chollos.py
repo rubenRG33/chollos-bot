@@ -210,14 +210,17 @@ def wallapop_vendedor(user_id, cfg):
     }
 
 
-def juzgar_vendedor(v, cfg):
-    """'descartar' (sin valoraciones), 'aviso' (pocas o desconocidas) o 'ok'."""
+def juzgar_vendedor(v, cfg, origen="wallapop"):
+    """'descartar' (pocas valoraciones), 'aviso' (justas o desconocidas) o 'ok'."""
     c = cfg.get("vendedor", {})
     if v is None:
         return "aviso"
     if v.get("profesional"):
         return "ok"
-    if v["valoraciones"] < c.get("descartar_si_menos_de", 1):
+    minimo = c.get("descartar_si_menos_de", 1)
+    if origen == "vinted":
+        minimo = c.get("descartar_si_menos_de_vinted", minimo)
+    if v["valoraciones"] < minimo:
         return "descartar"
     if v["valoraciones"] < c.get("avisar_si_menos_de", 5):
         return "aviso"
@@ -507,6 +510,11 @@ def mercado_producto(prod, cfg, cache, forzar=False):
     log.info("Mercado %s: %s", prod["nombre"],
              {v: "%s€ (%d)" % (d["mediana"], d["n"]) for v, d in variantes.items()})
     return variantes
+
+
+def demasiado_bueno(it, mer, cfg):
+    """Pedir menos de ~la mitad del mercado es la firma típica de una estafa."""
+    return it["precio"] < cfg.get("descartar_bajo_pct_mercado", 0.45) * mer["mediana"]
 
 
 def evaluar(it, mer, cfg):
@@ -814,6 +822,10 @@ def ejecutar(args):
             if not mer or mer["n"] < cfg["min_comparables"]:
                 log.info("Sin datos suficientes de %s %s: %s", prod["nombre"], var, it["titulo"][:60])
                 continue  # no se marca como visto: se reintenta cuando haya datos
+            if demasiado_bueno(it, mer, cfg):
+                log.info("  descartado: precio demasiado bajo para ser real (%s)", it["titulo"][:50])
+                vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+                continue
             ev = evaluar(it, mer, cfg)
             marca = "✔" if ev["beneficio"] >= cfg["beneficio_min"] else "·"
             log.info("%s %s | %d€ | mercado %d€ | beneficio %d€%s",
@@ -823,7 +835,7 @@ def ejecutar(args):
                 it["vendedor"] = wallapop_vendedor(it.get("user_id"), cfg)
                 pausa(cfg)
                 if juzgar_vendedor(it["vendedor"], cfg) == "descartar":
-                    log.info("  descartado: vendedor sin valoraciones (%s)", it["titulo"][:50])
+                    log.info("  descartado: vendedor con pocas valoraciones (%s)", it["titulo"][:50])
                     vistos[it["id"]] = {"p": it["precio"], "t": ahora}
                     continue
                 candidatos.append((it, prod["nombre"], var, ev, dist))
@@ -837,7 +849,7 @@ def ejecutar(args):
         except RuntimeError as e:
             op = None
             log.error("Vinted no disponible esta ronda: %s", e)
-        for prod in (cfg["productos"] if op else []):
+        for prod in ([p for p in cfg["productos"] if not p.get("sin_vinted")] if op else []):
             primera = prod["nombre"] not in base  # primera vez: solo apunta lo que ya hay
             try:
                 items = vinted_buscar(op, prod["buscar"], cfg)
@@ -865,6 +877,10 @@ def ejecutar(args):
                     continue
                 if not mer or mer["n"] < cfg["min_comparables"]:
                     continue
+                if demasiado_bueno(it, mer, cfg):
+                    log.info("  descartado: precio demasiado bajo para ser real (%s)", it["titulo"][:50])
+                    vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+                    continue
                 ev = evaluar(it, mer, cfg)
                 marca = "✔" if ev["beneficio"] >= cfg["beneficio_min"] else "·"
                 log.info("%s [Vinted] %s | %d€ | mercado %d€ | beneficio %d€", marca,
@@ -879,8 +895,8 @@ def ejecutar(args):
                     log.warning("No pude leer la ficha de %s: %s", it["id"], e)
                     it["vendedor"] = None
                 if re.search(cfg["excluir_defectos"], it["desc"].lower()) or \
-                        juzgar_vendedor(it["vendedor"], cfg) == "descartar":
-                    log.info("  descartado: defecto o vendedor sin valoraciones (%s)", it["titulo"][:50])
+                        juzgar_vendedor(it["vendedor"], cfg, "vinted") == "descartar":
+                    log.info("  descartado: defecto o vendedor con pocas valoraciones (%s)", it["titulo"][:50])
                     vistos[it["id"]] = {"p": it["precio"], "t": ahora}
                     continue
                 candidatos.append((it, prod["nombre"], var, ev, None))
@@ -930,6 +946,10 @@ def ejecutar(args):
                     continue
                 if not mer or mer["n"] < cfg["min_comparables"]:
                     continue
+                if demasiado_bueno(it, mer, cfg):
+                    log.info("  descartado: precio demasiado bajo para ser real (%s)", it["titulo"][:50])
+                    vistos[it["id"]] = {"p": it["precio"], "t": ahora}
+                    continue
                 ev = evaluar(it, mer, cfg)
                 log.info("%s [Cash Converters] %s | %d€ | mercado %d€ | beneficio %d€",
                          "✔" if ev["beneficio"] >= cfg["beneficio_min"] else "·",
@@ -972,6 +992,10 @@ def ejecutar(args):
                 log.error("Mercado %s: %s", prod["nombre"], e)
                 continue
             if not mer or mer["n"] < cfg["min_comparables"]:
+                continue
+            if demasiado_bueno(it, mer, cfg):
+                log.info("  descartado: precio demasiado bajo para ser real (%s)", it["titulo"][:50])
+                vistos[it["id"]] = {"p": it["precio"], "t": ahora}
                 continue
             ev = evaluar(it, mer, cfg)
             log.info("%s [%s] %s | %d€ | mercado %d€ | beneficio %d€",

@@ -102,10 +102,24 @@ class Flujo(unittest.TestCase):
 
     def test_vendedor_con_pocas_valoraciones_avisa_pero_llega(self):
         self.wallapop["iphone 13"] = [anuncio("a1", user="nuevo")]
-        self.vendedores["nuevo"] = dict(BUEN_VENDEDOR, valoraciones=2)
+        self.vendedores["nuevo"] = dict(BUEN_VENDEDOR, valoraciones=4)
         self.ronda()
         self.assertEqual(self.ids(), ["a1"])
-        self.assertIn("2 valoraciones", self.enviados[0][1])
+        self.assertIn("4 valoraciones", self.enviados[0][1])
+
+    def test_vendedor_con_muy_pocas_valoraciones_se_descarta(self):
+        self.wallapop["iphone 13"] = [anuncio("a1", user="nuevo")]
+        self.vendedores["nuevo"] = dict(BUEN_VENDEDOR, valoraciones=2)
+        self.ronda()
+        self.assertEqual(self.ids(), [])
+
+    def test_precio_demasiado_bajo_para_ser_real_se_descarta(self):
+        self.wallapop["iphone 13"] = [anuncio("a1", precio=135)]  # mercado 212: 135 > 45%, llega
+        self.ronda()
+        self.assertEqual(self.ids(), ["a1"])
+        self.wallapop["iphone 13"] = [anuncio("a2", precio=90)]   # 90 < 45% de 212: estafa probable
+        self.ronda()
+        self.assertEqual(self.ids(), ["a1"])
 
     def test_vendedor_ilegible_llega_con_aviso(self):
         self.wallapop["iphone 13"] = [anuncio("a1", user="x")]
