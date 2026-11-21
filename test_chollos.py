@@ -51,6 +51,15 @@ class Clasificacion(unittest.TestCase):
             prod = PROD["PS5"] if "playStation" in titulo else (PROD["Xbox Series"] if "Xbox" in titulo else PROD["Steam Deck"])
             self.assertIsNone(chollos.clasificar(prod, anuncio(titulo, 250), CFG), titulo)
 
+    def test_titulos_en_frances_e_italiano_de_vinted_se_descartan(self):
+        for titulo, prod in (("apple watch SE 2 gen + filo per caricarlo", "Apple Watch"),
+                             ("Apple Watch SE série 2 40 mm", "Apple Watch"),
+                             ("Ps4 avc call of", "PS4"),
+                             ("MacBook Air M1 2020 8GB/256GB - Tastiera US", "MacBook Air M1")):
+            self.assertIsNone(chollos.clasificar(PROD[prod], anuncio(titulo, 150 if prod != "MacBook Air M1" else 340), CFG), titulo)
+        # y un título normal en español sigue pasando
+        self.assertEqual(chollos.clasificar(PROD["Apple Watch"], anuncio("Apple Watch SE 2 GPS 40mm", 120), CFG), "se")
+
     def test_busco_se_descarta(self):
         self.assertIsNone(chollos.clasificar(PROD["iPhone 12"], anuncio("Busco iPhone 12 64gb"), CFG))
 
