@@ -127,6 +127,69 @@ class Distancia(unittest.TestCase):
         self.assertTrue(11 < d < 14, d)
 
 
+class ProductosNuevos(unittest.TestCase):
+    def test_airpods_max(self):
+        self.assertEqual(chollos.clasificar(PROD["AirPods Max"], anuncio("Apple AirPods Max plata", 250), CFG), "unico")
+        self.assertIsNone(chollos.clasificar(PROD["AirPods Max"], anuncio("Almohadillas AirPods Max", 250), CFG))
+        self.assertIsNone(chollos.clasificar(PROD["AirPods Max"], anuncio("Smart Case AirPods Max", 250), CFG))
+
+    def test_garmin_fenix_por_generacion(self):
+        self.assertEqual(chollos.clasificar(PROD["Garmin Fenix"], anuncio("Garmin Fenix 6 Pro Solar", 200), CFG), "6")
+        self.assertEqual(chollos.clasificar(PROD["Garmin Fenix"], anuncio("Garmin fenix 7", 300), CFG), "7")
+        self.assertIsNone(chollos.clasificar(PROD["Garmin Fenix"], anuncio("Correa Garmin Fenix 7", 300), CFG))
+
+    def test_fenix_8e_es_un_modelo_aparte_del_fenix_8(self):
+        self.assertEqual(chollos.clasificar(PROD["Garmin Fenix"], anuncio("Garmin Fenix 8E 47mm", 320), CFG), "8e")
+        self.assertEqual(chollos.clasificar(PROD["Garmin Fenix"], anuncio("Garmin Fenix 8 47mm Amoled", 450), CFG), "8")
+
+    def test_juego_de_3ds_barato_no_es_consola(self):
+        self.assertIsNone(chollos.clasificar(PROD["Nintendo 3DS"], anuncio("pokemon y 3ds", 55), CFG))
+
+    def test_relojes_vinted_en_otros_idiomas_se_descartan(self):
+        for titulo in ("Garmin Fenix 7S Premium Multisport GPS Horloge", "Montre Garmin Fenix 7", "Orologio garmin fenix 6 solare originale",
+                       "Garmin fenix 7S blanche", "Apple Watch SE boîtier 40 mm"):
+            nombre = "Apple Watch" if "Apple" in titulo else "Garmin Fenix"
+            self.assertIsNone(chollos.clasificar(PROD[nombre], anuncio(titulo, 150), CFG), titulo)
+
+    def test_nintendo_3ds_modelos(self):
+        self.assertEqual(chollos.clasificar(PROD["Nintendo 3DS"], anuncio("Nintendo 3DS XL azul", 120), CFG), "3dsxl")
+        self.assertEqual(chollos.clasificar(PROD["Nintendo 3DS"], anuncio("New Nintendo 2DS XL", 120), CFG), "new2dsxl")
+        self.assertIsNone(chollos.clasificar(PROD["Nintendo 3DS"], anuncio("Nintendo 3DS modificada con CFW", 120), CFG))
+        self.assertIsNone(chollos.clasificar(PROD["Nintendo 3DS"], anuncio("Juego Zelda 3DS", 120), CFG))
+
+    def test_thermomix_tm5_tm6_y_no_accesorios(self):
+        self.assertEqual(chollos.clasificar(PROD["Thermomix"], anuncio("Thermomix TM6 como nueva", 600), CFG), "6")
+        self.assertEqual(chollos.clasificar(PROD["Thermomix"], anuncio("Thermomix TM5 con vaso extra", 350), CFG), "5")
+        self.assertIsNone(chollos.clasificar(PROD["Thermomix"], anuncio("Vaso Thermomix TM6", 200), CFG))
+        self.assertIsNone(chollos.clasificar(PROD["Thermomix"], anuncio("Libro de recetas Thermomix TM5", 200), CFG))
+
+    def test_sonos_por_modelo(self):
+        self.assertEqual(chollos.clasificar(PROD["Sonos"], anuncio("Sonos Era 100 negro", 120), CFG), "era100")
+        self.assertEqual(chollos.clasificar(PROD["Sonos"], anuncio("Altavoz Sonos Beam gen 2", 250), CFG), "beam")
+        self.assertIsNone(chollos.clasificar(PROD["Sonos"], anuncio("Soporte pared Sonos One", 60), CFG))
+
+    def test_anuncios_que_mencionan_accesorios_no_se_pierden(self):
+        self.assertEqual(chollos.clasificar(PROD["iPhone 13"], anuncio("iPhone 13 128GB con funda y cargador", 200), CFG), "128")
+        self.assertEqual(chollos.clasificar(PROD["Apple Watch"], anuncio("Apple Watch Series 7 con correa extra y cargador", 150), CFG), "7")
+        self.assertEqual(chollos.clasificar(PROD["AirPods Max"], anuncio("AirPods Max con Smart Case y cable", 280), CFG), "unico")
+        self.assertEqual(chollos.clasificar(PROD["Nintendo 3DS"], anuncio("Nintendo 3DS XL con cargador y 5 juegos", 150), CFG), "3dsxl")
+
+    def test_los_accesorios_de_verdad_siguen_fuera(self):
+        for nombre, titulo in (("iPhone 13", "Funda iPhone 13 128GB"), ("iPhone 13", "Cargador para iPhone 13"),
+                               ("Apple Watch", "Correa para Apple Watch Series 7"), ("Apple Watch", "Cargador Apple Watch Series 7"),
+                               ("Sonos", "Soporte de pared para Sonos One"), ("Garmin Fenix", "Correa para Garmin Fenix 6")):
+            self.assertIsNone(chollos.clasificar(PROD[nombre], anuncio(titulo, 200), CFG), titulo)
+
+    def test_solo_los_productos_pedidos_estan_activos(self):
+        activos = {p["nombre"] for p in CFG["productos"] if p.get("activo", True)}
+        self.assertEqual(activos, {"iPhone 11", "iPhone 12", "iPhone 13", "iPhone 14", "iPhone 15", "PS5",
+                                   "Apple Watch", "AirPods Max", "Garmin Fenix", "Nintendo 3DS", "Thermomix", "Sonos"})
+
+    def test_todos_los_productos_activos_tienen_aviso_de_que_comprobar(self):
+        sin = [p["nombre"] for p in CFG["productos"] if p.get("activo", True) and not p.get("aviso")]
+        self.assertEqual(sin, [])
+
+
 class Ubicacion(unittest.TestCase):
     def test_la_ubicacion_viene_de_variables(self):
         cfg = {"ubicacion": {"lat": 0, "lon": 0, "radio_km": 30}}

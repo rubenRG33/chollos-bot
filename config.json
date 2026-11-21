@@ -17,44 +17,52 @@
     2,
     4
   ],
-  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b|estafa|atenci[oó]n|procuro|qualsiasi|idealny|sprzeda|\\bstan\\b|\\bnowy\\b|\\bkaufe\\b|\\bsuche\\b|\\blotes?\\b|\\blot\\b|lotto|bundle|\\bleer\\b|\\blee\\b|\\blire\\b|\\blees\\b|arnaque|\\bscam\\b|quiero comprar|comprarme|cagnotte|colecta|donaci|\\brifa\\b|sorteo|simulat|pedalier|p[ée]dalier|extension|expansi|port[aá]til|\\bportal\\b|\\bavec\\b|tr[eè]s|[ée]tat|occasion|lecteur|giochi|gioco|nuov[oa]|usato|ricondizionat|versione|colore|scatola|joestick|nieuw|\\bmet\\b|\\bnovo\\b|\\bmit\\b|\\bund\\b|gebraucht|\\bneu\\b|neuf|neuve|vendu|\\bprix\\b|\\bjour\\b|preuve|seconda|generazione|con cd|non compra|spedizione|g[ée]n[ée]ration|\\d(eme|ème)\\b|\\bcomme neuf\\b|\\bbon\\b|\\bbonne\\b|s[ée]rie\\b|\\bper\\b|caricar|\\bfilo\\b|\\bavc\\b|tastiera|clavier|toetsenbord|\\bpour\\b|\\bdans\\b|\\bsans\\b|\\bsenza\\b|\\bcon il\\b|\\bde la\\b",
+  "excluir_titulo": "busco|compro|se compra|cambio por|alquil|solo (la )?caja|caja vac|cerco|cherche|zoek|suche|manette|jeux|zwart|groen|blauw|\\bwit\\b|\\bnero\\b|mezzanotte|\\bpreto\\b|\\blivre\\b|scatola|completa di|accessoires|batteria|simlock|\\bet\\b|\\burgent\\b|\\bblu\\b|\\bviola\\b|lilla|grigio|bianco|\\bnoir\\b|\\bblanc\\b|\\brouge\\b|\\bcon scatola\\b|estafa|atenci[oó]n|procuro|qualsiasi|idealny|sprzeda|\\bstan\\b|\\bnowy\\b|\\bkaufe\\b|\\bsuche\\b|\\blotes?\\b|\\blot\\b|lotto|bundle|\\bleer\\b|\\blee\\b|\\blire\\b|\\blees\\b|arnaque|\\bscam\\b|quiero comprar|comprarme|cagnotte|colecta|donaci|\\brifa\\b|sorteo|simulat|pedalier|p[ée]dalier|extension|expansi|port[aá]til|\\bportal\\b|\\bavec\\b|tr[eè]s|[ée]tat|occasion|lecteur|giochi|gioco|nuov[oa]|usato|ricondizionat|versione|colore|scatola|joestick|nieuw|\\bmet\\b|\\bnovo\\b|\\bmit\\b|\\bund\\b|gebraucht|\\bneu\\b|neuf|neuve|vendu|\\bprix\\b|\\bjour\\b|preuve|seconda|generazione|con cd|non compra|spedizione|g[ée]n[ée]ration|\\d(eme|ème)\\b|\\bcomme neuf\\b|\\bbon\\b|\\bbonne\\b|s[ée]rie\\b|\\bper\\b|caricar|\\bfilo\\b|\\bavc\\b|tastiera|clavier|toetsenbord|\\bpour\\b|\\bdans\\b|\\bsans\\b|\\bsenza\\b|\\bcon il\\b|\\bde la\\b|bo[iî]tier|montre|blanche|horloge|orologio|\\bsolare\\b|\\boriginale\\b|multisport|\\bnoir\\b|\\bgris\\b",
   "excluir_defectos": "para piezas|despiece|averiad|no funciona|no enciende|no carga|sin funcionar|defectuos|para reparar|\\broto\\b|\\brota\\b|\\brotos\\b|bloquead[oa]|pantalla (rota|partida)|cristal (roto|partido)|no da imagen|placa (da[ñn]ada|base)",
   "productos": [
     {
       "nombre": "iPhone 11",
       "buscar": "iphone 11",
       "patron": "iphone\\s*11",
-      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "excluye": "\\b(pro|mini|max|plus)\\b|^(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a)|(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a) (para|de) |compatible|r[eé]plica|copia|solo (la )?(funda|cargador|cable|caja)|para piezas|para despiece",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 80
+      "precio_min": 80,
+      "activo": true,
+      "aviso": "Comprueba que no tenga iCloud ni bloqueo de operador, y la salud de la batería (Ajustes > Batería)."
     },
     {
       "nombre": "iPhone 12",
       "buscar": "iphone 12",
       "patron": "iphone\\s*12",
-      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "excluye": "\\b(pro|mini|max|plus)\\b|^(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a)|(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a) (para|de) |compatible|r[eé]plica|copia|solo (la )?(funda|cargador|cable|caja)|para piezas|para despiece",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 100
+      "precio_min": 100,
+      "activo": true,
+      "aviso": "Comprueba que no tenga iCloud ni bloqueo de operador, y la salud de la batería (Ajustes > Batería)."
     },
     {
       "nombre": "iPhone 13",
       "buscar": "iphone 13",
       "patron": "iphone\\s*13",
-      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "excluye": "\\b(pro|mini|max|plus)\\b|^(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a)|(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a) (para|de) |compatible|r[eé]plica|copia|solo (la )?(funda|cargador|cable|caja)|para piezas|para despiece",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 130
+      "precio_min": 130,
+      "activo": true,
+      "aviso": "Comprueba que no tenga iCloud ni bloqueo de operador, y la salud de la batería (Ajustes > Batería)."
     },
     {
       "nombre": "iPhone 14",
       "buscar": "iphone 14",
       "patron": "iphone\\s*14",
-      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "excluye": "\\b(pro|mini|max|plus)\\b|^(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a)|(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a) (para|de) |compatible|r[eé]plica|copia|solo (la )?(funda|cargador|cable|caja)|para piezas|para despiece",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 180
+      "precio_min": 180,
+      "activo": true,
+      "aviso": "Comprueba que no tenga iCloud ni bloqueo de operador, y la salud de la batería (Ajustes > Batería)."
     },
     {
       "nombre": "Samsung Galaxy S21",
@@ -63,7 +71,8 @@
       "excluye": "ultra|plus|\\+|\\bfe\\b|funda|cargador|cable|protector|carcasa",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 70
+      "precio_min": 70,
+      "activo": false
     },
     {
       "nombre": "Samsung Galaxy S22",
@@ -72,7 +81,8 @@
       "excluye": "ultra|plus|\\+|\\bfe\\b|funda|cargador|cable|protector|carcasa",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 90
+      "precio_min": 90,
+      "activo": false
     },
     {
       "nombre": "PS5",
@@ -82,7 +92,9 @@
       "variante": "(digital)",
       "variante_defecto": "disco",
       "precio_min": 150,
-      "sin_vinted": true
+      "sin_vinted": true,
+      "activo": true,
+      "aviso": "Comprueba que enciende, lee el disco (si lo lleva) y se conecta a internet. Pide la factura si la tiene."
     },
     {
       "nombre": "Nintendo Switch",
@@ -91,16 +103,19 @@
       "excluye": "juego|funda|mando|joy|dock|base|cartucho|amiibo|pro controller|\\b2\\b|zelda|mario|pokemon|kart|tarjeta|\\bsd\\b|cargador|cable|protector|soporte|volante|ring|edition|edici[oó]n|day one|repod|collection|colecci|anniversary|special reserve|super rare|limited run|physical|\\bgame\\b|\\bjeu\\b|dlc",
       "variante": "(oled|lite)",
       "variante_defecto": "normal",
-      "precio_min": 70
+      "precio_min": 70,
+      "activo": false
     },
     {
       "nombre": "Apple Watch",
       "buscar": "apple watch",
       "patron": "apple\\s*watch",
-      "excluye": "correa|cargador|funda|cristal|protector|pulsera|base|soporte|cable|carcasa|malla|\\bbanda\\b|repod|airpod|dock|stand",
+      "excluye": "^(correa|cargador|funda|cristal|protector|pulsera|base|soporte|cable|carcasa|malla|banda)|(correa|cargador|funda|cristal|protector|pulsera|base|soporte|cable|carcasa|malla|banda) (para|de) |compatible|r[eé]plica|copia|repod|airpod|dock|\\bstand\\b|solo (la )?(correa|cargador|caja)|para piezas",
       "variante": "\\b(?:series?\\s*)?(10|[4-9])\\b(?!\\s*mm)|\\b(se|ultra)\\b",
       "variante_obligatoria": true,
-      "precio_min": 70
+      "precio_min": 70,
+      "activo": true,
+      "aviso": "Comprueba que no esté bloqueado a un iCloud ajeno: debe poder desvincularse delante de ti."
     },
     {
       "nombre": "Kettlebell",
@@ -109,7 +124,8 @@
       "excluye": "lote|pack|set|juego|pareja|\\bpar\\b|\\dx|x\\d",
       "variante": "(\\d{1,2})\\s*kg",
       "variante_obligatoria": true,
-      "precio_min": 8
+      "precio_min": 8,
+      "activo": false
     },
     {
       "nombre": "Mancuernas ajustables",
@@ -118,7 +134,8 @@
       "excluye": "lote|pack|set|juego|\\dx|x\\d",
       "variante": "(\\d{2})\\s*kg",
       "variante_obligatoria": true,
-      "precio_min": 15
+      "precio_min": 15,
+      "activo": false
     },
     {
       "nombre": "Discos de pesas",
@@ -127,16 +144,19 @@
       "excluye": "lote|pack|set|juego|barra|\\dx|x\\d",
       "variante": "(\\d{1,2}(?:[.,]\\d)?)\\s*kg",
       "variante_obligatoria": true,
-      "precio_min": 8
+      "precio_min": 8,
+      "activo": false
     },
     {
       "nombre": "iPhone 15",
       "buscar": "iphone 15",
       "patron": "iphone\\s*15",
-      "excluye": "\\b(pro|mini|max|plus)\\b|funda|cargador|cable|protector|carcasa",
+      "excluye": "\\b(pro|mini|max|plus)\\b|^(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a)|(funda|cargador|cable|protector|carcasa|cristal|pantalla|bater[ií]a) (para|de) |compatible|r[eé]plica|copia|solo (la )?(funda|cargador|cable|caja)|para piezas|para despiece",
       "variante": "(64|128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 280
+      "precio_min": 280,
+      "activo": true,
+      "aviso": "Comprueba que no tenga iCloud ni bloqueo de operador, y la salud de la batería (Ajustes > Batería)."
     },
     {
       "nombre": "Samsung Galaxy S23",
@@ -145,7 +165,8 @@
       "excluye": "ultra|plus|\\+|\\bfe\\b|funda|cargador|cable|protector|carcasa",
       "variante": "(128|256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 140
+      "precio_min": 140,
+      "activo": false
     },
     {
       "nombre": "MacBook Air M1",
@@ -154,7 +175,8 @@
       "excluye": "funda|cargador|bater|pantalla|teclado|carcasa|piezas|m2|m3|protector|adaptador|hub|soporte",
       "variante": "(256|512)\\s*gb",
       "variante_obligatoria": true,
-      "precio_min": 300
+      "precio_min": 300,
+      "activo": false
     },
     {
       "nombre": "Steam Deck",
@@ -164,7 +186,8 @@
       "variante": "(oled)|(64|256|512)\\s*gb",
       "variante_obligatoria": true,
       "precio_min": 150,
-      "sin_vinted": true
+      "sin_vinted": true,
+      "activo": false
     },
     {
       "nombre": "Meta Quest",
@@ -173,7 +196,8 @@
       "excluye": "funda|correa|bater|elite|accesorio|cargador|protector|soporte|lente|cable|juego|carcasa|grip|facial|interfaz",
       "variante": "quest\\s*([23])",
       "variante_obligatoria": true,
-      "precio_min": 80
+      "precio_min": 80,
+      "activo": false
     },
     {
       "nombre": "Xbox Series",
@@ -183,7 +207,8 @@
       "variante": "series\\s*([sx])\\b",
       "variante_obligatoria": true,
       "precio_min": 120,
-      "sin_vinted": true
+      "sin_vinted": true,
+      "activo": false
     },
     {
       "nombre": "GoPro Hero",
@@ -192,7 +217,8 @@
       "excluye": "funda|carcasa|bater|soporte|palo|tr[ií]pode|accesorio|cargador|tarjeta|filtro|mando|correa|gafas|casco|arn[eé]s|pack|jaula|mic|sin c[aá]mara|compatible",
       "variante": "hero\\s*(\\d{1,2})\\b",
       "variante_obligatoria": true,
-      "precio_min": 60
+      "precio_min": 60,
+      "activo": false
     },
     {
       "nombre": "Dyson V",
@@ -201,7 +227,8 @@
       "excluye": "filtro|bater|cepillo|accesorio|repuesto|soporte|cargador|motor|boquilla|manguera|tubo|kit|pieza|solo|compatible|pared",
       "variante": "dyson\\s*(v\\d{1,2})",
       "variante_obligatoria": true,
-      "precio_min": 80
+      "precio_min": 80,
+      "activo": false
     },
     {
       "nombre": "Garmin Forerunner",
@@ -210,7 +237,8 @@
       "excluye": "correa|cargador|cable|funda|protector|cristal|soporte|bater|pulsera|banda|compatible",
       "variante": "forerunner\\s*(\\d{2,3})",
       "variante_obligatoria": true,
-      "precio_min": 40
+      "precio_min": 40,
+      "activo": false
     },
     {
       "nombre": "PS4",
@@ -219,7 +247,61 @@
       "excluye": "mando|dualshock|juego|\\bvr\\b|cascos|base|soporte|c[aá]mara|disco duro|ssd|fifa|volante|funda|skin|cable|cargador|stand|ventilador|edition|edici[oó]n|day one|repod|gta|pes",
       "variante": "(pro|slim)",
       "variante_defecto": "normal",
-      "precio_min": 70
+      "precio_min": 70,
+      "activo": false
+    },
+    {
+      "nombre": "AirPods Max",
+      "buscar": "airpods max",
+      "patron": "airpods\\s*max",
+      "excluye": "^(funda|almohadillas?|smart case|diadema|cable|cargador|soporte|protector|carcasa|repuesto|pieza)|(funda|almohadillas?|smart case|diadema|cable|cargador|soporte|protector|carcasa|repuesto|pieza) (para|de) |compatible|r[eé]plica|copia|solo (la )?(almohadilla|diadema|funda|cable)|para piezas|\\btipo\\b",
+      "precio_min": 150,
+      "activo": true,
+      "aviso": "Hay muchas falsificaciones: comprueba el número de serie en la web de Apple y prueba la cancelación de ruido en persona."
+    },
+    {
+      "nombre": "Garmin Fenix",
+      "buscar": "garmin fenix",
+      "patron": "fenix\\s*\\d",
+      "excluye": "^(correa|funda|protector|cristal|cargador|cable|soporte|pulsera|carcasa)|(correa|funda|protector|cristal|cargador|cable|soporte|pulsera|carcasa) (para|de) |compatible|r[eé]plica|copia|solo (la )?(correa|cargador|cable)|para piezas",
+      "variante": "fenix\\s*(\\d+e?)",
+      "variante_obligatoria": true,
+      "precio_min": 80,
+      "activo": true,
+      "aviso": "Comprueba la batería, que los sensores funcionan y que no sea una réplica."
+    },
+    {
+      "nombre": "Nintendo 3DS",
+      "buscar": "nintendo 3ds",
+      "patron": "(new\\s*)?(3ds|2ds)",
+      "excluye": "^(funda|cargador|cable|juego|stylus|l[aá]piz|tarjeta|protector|carcasa|pantalla)|(funda|cargador|cable|juego|stylus|l[aá]piz|tarjeta|protector|carcasa|pantalla) (para|de) |compatible|r[eé]plica|copia|modificad|flashe|cfw|hack|solo (el )?(juego|cargador)|para piezas|bisagra",
+      "variante": "((?:new\\s*(?:nintendo\\s*)?)?(?:3ds|2ds)(?:\\s*xl)?)",
+      "variante_obligatoria": true,
+      "precio_min": 70,
+      "activo": true,
+      "aviso": "Comprueba que no esté modificada (CFW) y que pantallas, bisagras y botones estén bien."
+    },
+    {
+      "nombre": "Thermomix",
+      "buscar": "thermomix",
+      "patron": "thermomix\\s*(tm\\s*)?[56]\\b|thermomix\\s*tm[56]",
+      "excluye": "^(vaso|jarra|libro|cuchillas?|tapa|varoma|cubilete|esp[aá]tula|mariposa|cesta|bol|junta|cuchara|funda|bolsa|recambio|repuesto|pieza|accesorios?|cargador|cable|pantalla|b[aá]scula)|(vaso|jarra|libro|cuchillas?|tapa|varoma|cubilete|esp[aá]tula|mariposa|cesta|bol|junta|cuchara|funda|bolsa|recambio|repuesto|pieza|accesorios?|cargador|cable|pantalla|b[aá]scula) (para|de) |compatible|r[eé]plica|copia|libro de recetas|solo (el )?(vaso|varoma|cuchillas?|tapa)|sin (m[aá]quina|base)|para piezas",
+      "variante": "tm\\s*([56])|thermomix\\s*([56])",
+      "variante_obligatoria": true,
+      "precio_min": 150,
+      "activo": true,
+      "aviso": "Pide verlo funcionando (calentar, triturar y pesar) antes de pagar."
+    },
+    {
+      "nombre": "Sonos",
+      "buscar": "sonos",
+      "patron": "sonos\\s*(one|era\\s*\\d+|beam|arc|roam|move|sub|play\\s*:?\\s*[135]|ray)",
+      "excluye": "^(soporte|base|stand|funda|cable|mando|pared)|(soporte|base|stand|funda|cable|mando|pared) (para|de) |compatible|r[eé]plica|copia|soporte para|solo (el )?(soporte|cable)|para piezas",
+      "variante": "(one|era\\s*\\d+|beam|arc|roam|move|sub|play\\s*:?\\s*[135]|ray)",
+      "variante_obligatoria": true,
+      "precio_min": 50,
+      "activo": true,
+      "aviso": "Pídele que lo desvincule de su cuenta de Sonos delante de ti y comprueba que suene bien."
     }
   ],
   "vinted": {

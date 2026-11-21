@@ -443,7 +443,7 @@ def cc_buscar(texto, cfg):
 
 # ---------------------------------------------------------------- clasificación
 def normalizar_variante(v):
-    v = v.lower().replace(" ", "").replace(",", ".")
+    v = v.lower().replace("nintendo", "").replace(" ", "").replace(",", ".")
     return re.sub(r"^series?", "s", v)
 
 
@@ -578,6 +578,8 @@ def texto_aviso(it, prod_nombre, var, ev, dist):
         lineas.append(linea_vendedor(it["vendedor"]))
     if vinted:
         lineas.append("ℹ️ Vinted no indica dónde está el vendedor: comprueba que sea de España.")
+    if it.get("aviso"):
+        lineas.append("🔎 Antes de pagar: " + esc(it["aviso"]))
     if ev["sospechoso"]:
         lineas.append("⚠️ Precio muy por debajo del mercado: revisa bien que no sea estafa o defecto.")
     return "\n".join(lineas)
@@ -765,6 +767,7 @@ def ejecutar(args):
     errores = validar_config(cfg)
     if errores:
         sys.exit("config.json tiene problemas: " + "; ".join(errores))
+    cfg["productos"] = [p for p in cfg["productos"] if p.get("activo", True)]  # los desactivados se ignoran
     if args.presupuesto is not None:
         cfg["presupuesto_max"] = args.presupuesto
     if args.margen is not None:
@@ -1006,6 +1009,9 @@ def ejecutar(args):
             else:
                 vistos[it["id"]] = {"p": it["precio"], "t": ahora}
 
+    avisos = {p["nombre"]: p.get("aviso") for p in cfg["productos"]}
+    for it, nombre, _var, _ev, _dist in candidatos:
+        it["aviso"] = avisos.get(nombre)
     candidatos.sort(key=lambda c: -c[3]["beneficio"])
     log.info("Ronda: %d búsquedas ok, %d fallidas, %d chollos", busquedas_ok, busquedas_mal,
              len(candidatos))

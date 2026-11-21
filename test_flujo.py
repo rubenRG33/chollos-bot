@@ -194,6 +194,19 @@ class Flujo(unittest.TestCase):
         self.assertIn("1 rondas", self.enviados[-1][1])
         self.assertIn("1 avisos", self.enviados[-1][1])
 
+    def test_producto_desactivado_se_ignora(self):
+        self.cfg["productos"] = [dict(p, activo=False) if p["nombre"] == "iPhone 13" else p for p in self.cfg["productos"]]
+        (self.tmp / "config.json").write_text(json.dumps(self.cfg), encoding="utf-8")
+        self.wallapop["iphone 13"] = [anuncio("a1")]
+        self.ronda()
+        self.assertEqual(self.ids(), [])
+
+    def test_el_aviso_incluye_que_comprobar_antes_de_pagar(self):
+        self.wallapop["iphone 13"] = [anuncio("a1")]
+        self.ronda()
+        self.assertIn("Antes de pagar", self.enviados[0][1])
+        self.assertIn("iCloud", self.enviados[0][1])
+
     # ---- Vinted
     def activar_vinted(self, items, vendedor=BUEN_VENDEDOR, desc="Como nuevo"):
         self.cfg["vinted"]["activo"] = True
